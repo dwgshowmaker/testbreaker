@@ -1,7 +1,15 @@
-"""TestBreaker Phase 1."""
+"""TestBreaker."""
 
-from testbreaker.domain import CommandResult, MutantResult, MutantStatus
+from testbreaker.changes import ChangeAnalysisError, analyze_changes
+from testbreaker.domain import ChangedTarget, CommandResult, MutantResult, MutantStatus
 from testbreaker.executor import run_mutant
 
-__all__ = ["CommandResult", "MutantResult", "MutantStatus", "run_mutant"]
-
+__all__ = [
+    "ChangeAnalysisError",
+    "ChangedTarget",
+    "CommandResult",
+    "MutantResult",
+    "MutantStatus",
+    "analyze_changes",
+    "run_mutant",
+]

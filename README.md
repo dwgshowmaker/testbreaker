@@ -1,8 +1,8 @@
 # TestBreaker
 
 TestBreaker checks whether an existing Python test suite detects a known-bad implementation.
-Its Phase 1 command takes a repository and a unified diff, applies the diff only in a temporary
-copy, and runs the repository's real pytest suite.
+It can run a supplied mutation against real tests and discover Python functions changed by a
+Git revision range.
 
 ## Install
 
@@ -24,9 +24,22 @@ uv run testbreaker run tests/fixtures/refund_app tests/fixtures/mutants/survived
   invalid Python syntax.
 - `BASELINE_FAILED` means the repository's tests already failed before mutation.
 
+## Analyze changed functions
+
+```bash
+uv run testbreaker changes . main...HEAD
+```
+
+This reads the real Git diff and reports functions, methods, and async functions containing
+changed new-version lines. Reported source includes decorators.
+
 ## Current limitations
 
-Phase 1 supports only local Python projects tested with pytest and patches accepted by
-`git apply`. It does not generate mutations or provide a sandbox. TestBreaker executes the
+Mutation execution supports only local Python projects tested with pytest and patches accepted
+by `git apply`. It does not generate mutations or provide a sandbox. TestBreaker executes the
 target repository's test suite. Only run it on code you trust.
 
+Phase 2 currently discovers function and method changes only. Module-level and class-level
+changes are ignored, as are nested functions. Functions deleted entirely by a diff are not
+emitted as `ChangedTarget` because they no longer exist in the current source. Change analysis
+supports only `.py` files and does not track renamed symbols.
